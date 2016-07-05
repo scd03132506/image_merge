@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>图片文字合成</title>
+<script src="Public/js/jquery-2.1.3.min.js"></script>
+<link href="Public/css/custom.css" rel="stylesheet">
+</head>
+<body>
+<input name="" type="hidden" class="text_Area1" value="张三"><!--第一个值-->
+<input name="" type="hidden" class="text_Area2" value="2016-05-05"><!--第二个值-->
+<img id="starImg" src="Public/images/sImg1.jpg" data-value="1"><!--图片原图-->
+<img id="startBtn" src="Public/images/startbtn.png"><!--开始按钮-->
+<canvas id="main" class="img_Area"></canvas><!--canvas区域-->
+<img id="endImg"><!--将canvas转成图片存入img标签，用于保存图片-->
+</body>
+<script>
+//按钮点击事件
+$('#startBtn').on('click',function(){
+	hechen();
+	resizeCanvas(); 
+});
+//合成图片方法
+function hechen(){
+		var mainCtx = getCanvasContext('main');//获取canvas
+		var starImg = new Image();//声明图片对象
+		starImg.src=$('#starImg').attr('src');//获取原图
+		var iwidth = $("#starImg").width();//获取原图宽度
+		var iheight = $("#starImg").height();//获取原图高度
+		//图片加载
+		starImg.onload=function(){
+			//先绘制图片到canvas，可绘制多个
+			//mainCtx.drawImage(图片对象,坐标x,坐标y,绘制宽度,绘制高度);
+			mainCtx.drawImage(starImg,0,0,iwidth-30,iheight);//底图
+			mainCtx.drawImage(starImg,0,0,iwidth-250,iheight-200);//二次绘图覆盖到底图可以用二维码
+			mainCtx.font = "0.5rem Microsoft Yahei";//设置文字大小字体
+			mainCtx.fillStyle = "#555";//设置文字颜色
+			//开始绘制文字，可绘制多个
+			//mainCtx.fillText(文字值,坐标x,坐标y);
+			mainCtx.fillText($('.text_Area1').val(),iwidth*0.27,iheight*0.52);
+			mainCtx.fillText($('.text_Area2').val(),iwidth*0.29,iheight*0.79);
+			//将图片存入img标签
+			saveImageInfo();
+		};
+}
+//获取canvas
+function getCanvasContext(id){
+  return document.getElementById(id).getContext("2d");
+}
+//定义canvas属性
+function resizeCanvas() {  
+ 	 var mainCtx = getCanvasContext('main');
+     $('#main').attr("width", $("#starImg").width()-30);  
+     $('#main').attr("height", $("#starImg").height());  
+   
+};  
+//将canvas绘出的图转成图片存入img
+function saveImageInfo ()   {  
+     var mycanvas = document.getElementById("main");  
+     var image = mycanvas.toDataURL("image/png");  
+     $('#endImg').attr('src',image); 
+	 
+} 
+</script>
+</html>
