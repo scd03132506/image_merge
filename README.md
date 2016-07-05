@@ -1,1 +1,1 @@
-图片合成代码，放在服务器环境中运行index.html
+canvas实现图片文字合成，放在服务器环境中运行index.html。
